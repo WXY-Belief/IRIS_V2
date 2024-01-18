@@ -1,7 +1,7 @@
 # please using absolute path for all path
-data_path: D:\topic\topic_5_ISS_analysis\0106    # absolute path of data path
-output_path: D:\topic\topic_5_ISS_analysis\0106  # absolute path of output path
-iris_path: D:\topic\topic_5_ISS_analysis\0106\IRIS # absolute path of IRIS path
+data_path:     # absolute path of data path
+output_path:  # absolute path of output path
+iris_path:  # absolute path of IRIS path
 register_mode: 'ORB'   # register mode. # Alternative option: "ORB"
 mode: "com"          # whether to cut images when images is too large. com:NO large:YES
 
@@ -19,7 +19,7 @@ cycle:    # cycle name
   - 2
   - 3
   - 4
-barcode_path: D:\topic\topic_5_ISS_analysis\barcode.txt    # gene-barcode file
+barcode_path:     # gene-barcode file
 search_region: 1.5    # the size of search region  in connect base on different cycle. # Alternative option: 2, 3, 4
 temp_flag: 1    # whether to generate debug file. 0:NO 1:YES
 blob_params:

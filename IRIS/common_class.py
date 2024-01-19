@@ -173,7 +173,7 @@ class TransformCoordinate(object):
             rna_coor = pd.merge(rna_coor, barcode, on="barcode")
             valid_rna = pd.concat([valid_rna, rna_coor])  # valid rna
 
-        ori_rna.to_csv(os.path.join(self.save_path, "basecalling_data.txt"), sep="\t", header=True, index=False)
+        ori_rna.to_csv(os.path.join(self.save_path, "mul_basecalling_data.txt"), sep="\t", header=True, index=False)
         print("The number of all RNA detectedis", ori_rna.shape[0])
         valid_rna.to_csv(os.path.join(self.save_path, "valid_rna_coordinate.csv"), sep=",", header=True, index=False)
         print("The number of valid RNA is", valid_rna.shape[0])

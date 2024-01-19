@@ -19,6 +19,12 @@ cycle:    # cycle name
   - 2
   - 3
   - 4
+channel:
+  0: DAPI.tif
+  A: Cy5.tif
+  T: Y7.tif
+  C: TXR.tif
+  G: Cy3.tif
 barcode_path:     # gene-barcode file
 search_region: 1.5    # the size of search region  in connect base on different cycle. # Alternative option: 2, 3, 4
 temp_flag: 1    # whether to generate debug file. 0:NO 1:YES

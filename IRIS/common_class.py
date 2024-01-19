@@ -23,8 +23,8 @@ class CutImages(object):
         self.col_num = 0
         self.infos = []
 
-    def calculate_row_num_and_col_num(self):
-        images = Image.open(os.path.join(self.images_path, str(self.cycle_names[0]), "DAPI.tif"))
+    def calculate_row_num_and_col_num(self, channels):
+        images = Image.open(os.path.join(self.images_path, str(self.cycle_names[0]), channels["0"]))
         self.row_num = math.ceil(images.height / (self.cut_size - self.overlap))
         self.col_num = math.ceil(images.width / (self.cut_size - self.overlap))
 
@@ -76,26 +76,27 @@ class CutImages(object):
                     print("cut mode is wrong")
                     return
 
-    def main_cut(self, cycle_stack=None):
+    def main_cut(self, cycle_stack=None,
+                 channels={"A": "Cy5.tif", "T": "Y7.tif", "C": "TXR.tif", "G": "Cy3.tif", "0": "DAPI.tif"}):
         # calculating the number of row and col
-        self.calculate_row_num_and_col_num()
+        self.calculate_row_num_and_col_num(channels)
 
         # creating folder
         self.mkdir_dir()
 
         if self.mode == "large":
             for i in range(0, len(self.cycle_names)):
-                channel_A = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), "Cy5.tif")))
-                channel_T = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), "Y7.tif")))
-                channel_C = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), "TXR.tif")))
-                channel_G = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), "Cy3.tif")))
-                channel_0 = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), "DAPI.tif")))
+                channel_A = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["A"])))
+                channel_T = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["T"])))
+                channel_C = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["C"])))
+                channel_G = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["G"])))
+                channel_0 = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["0"])))
 
-                self.cut_image(channel_A, "Cy5.tif", self.cycle_names[i])
-                self.cut_image(channel_T, "Y7.tif", self.cycle_names[i])
-                self.cut_image(channel_C, "TXR.tif", self.cycle_names[i])
-                self.cut_image(channel_G, "Cy3.tif", self.cycle_names[i])
-                self.cut_image(channel_0, "DAPI.tif", self.cycle_names[i])
+                self.cut_image(channel_A, channels["A"], self.cycle_names[i])
+                self.cut_image(channel_T, channels["T"], self.cycle_names[i])
+                self.cut_image(channel_C, channels["C"], self.cycle_names[i])
+                self.cut_image(channel_G, channels["G"], self.cycle_names[i])
+                self.cut_image(channel_0, channels["0"], self.cycle_names[i])
 
                 if self.cycle_names[i] == 1:
                     background_img = add(add(add(channel_A, channel_T), channel_C), channel_G)
@@ -110,11 +111,11 @@ class CutImages(object):
                 channel_G = cycle_stack[i][3]
                 channel_0 = cycle_stack[i][4]
 
-                self.cut_image(channel_A, "Cy5.tif", self.cycle_names[i])
-                self.cut_image(channel_T, "Y7.tif", self.cycle_names[i])
-                self.cut_image(channel_C, "TXR.tif", self.cycle_names[i])
-                self.cut_image(channel_G, "Cy3.tif", self.cycle_names[i])
-                self.cut_image(channel_0, "DAPI.tif", self.cycle_names[i])
+                self.cut_image(channel_A, channels["A"], self.cycle_names[i])
+                self.cut_image(channel_T, channels["T"], self.cycle_names[i])
+                self.cut_image(channel_C, channels["C"], self.cycle_names[i])
+                self.cut_image(channel_G, channels["G"], self.cycle_names[i])
+                self.cut_image(channel_0, channels["0"], self.cycle_names[i])
 
 
 # draw point

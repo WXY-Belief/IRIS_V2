@@ -21,7 +21,7 @@ def load_config_file(path):
 
 
 # Importing images
-def import_img(f_cycles):
+def import_img(f_cycles, channels):
     if len(f_cycles) < 1:
         print('ERROR CYCLES', file=stderr)
         exit(1)
@@ -31,11 +31,11 @@ def import_img(f_cycles):
 
     for cycle_id in range(0, len(f_cycles)):
         adj_img_mats = []
-        channel_A = imread('/'.join((str(f_cycles[cycle_id]), 'Cy5.tif')), IMREAD_GRAYSCALE)
-        channel_T = imread('/'.join((str(f_cycles[cycle_id]), 'Y7.tif')), IMREAD_GRAYSCALE)
-        channel_C = imread('/'.join((str(f_cycles[cycle_id]), 'TXR.tif')), IMREAD_GRAYSCALE)
-        channel_G = imread('/'.join((str(f_cycles[cycle_id]), 'Cy3.tif')), IMREAD_GRAYSCALE)
-        channel_0 = imread('/'.join((str(f_cycles[cycle_id]), 'DAPI.tif')), IMREAD_GRAYSCALE)
+        channel_A = imread('/'.join((str(f_cycles[cycle_id]), channels["A"])), IMREAD_GRAYSCALE)
+        channel_T = imread('/'.join((str(f_cycles[cycle_id]), channels["T"])), IMREAD_GRAYSCALE)
+        channel_C = imread('/'.join((str(f_cycles[cycle_id]), channels["C"])), IMREAD_GRAYSCALE)
+        channel_G = imread('/'.join((str(f_cycles[cycle_id]), channels["G"])), IMREAD_GRAYSCALE)
+        channel_0 = imread('/'.join((str(f_cycles[cycle_id]), channels["0"])), IMREAD_GRAYSCALE)
 
         if cycle_id == 0:
             foreground = add(add(add(channel_A, channel_T), channel_C), channel_G)
@@ -58,7 +58,7 @@ def main_detect(info: list):
     config = load_config_file(info[1])  # load conguration file
 
     barcode_cube_obj = connect_barcodes.BarcodeCube(config["search_region"])
-    cycle_stack, std_img = import_img(config["cycle"])  # import and align images
+    cycle_stack, std_img = import_img(config["cycle"], config["channel"])  # import and align images
 
     if np.sum(std_img) == 0:
         print(info[0], "is completely black")
@@ -90,7 +90,7 @@ def main_call(config, data_path, output_path, config_path):
     small_img_para = config["small_img_para"]
     small_images = CutImages(data_path, small_img_para["cut_size"], output_path, small_img_para["overlap"],
                              config["cycle"], config["iris_path"])
-    small_images.main_cut(cycle_stack)
+    small_images.main_cut(cycle_stack=cycle_stack, channels=config["channel"])
     print("the number of small img is", len(small_images.infos))
 
     # detected RNA
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         large_img_para = config["large_img_para"]
         Big_images = CutImages(config["data_path"], large_img_para["cut_size"], output_path, large_img_para["overlap"],
                                config["cycle"], config["iris_path"], cut_mode)
-        Big_images.main_cut()
+        Big_images.main_cut(channels=config["channel"])
         for item in Big_images.infos:
             print(f"--------------------{item}-------------------")
             single_output_path = os.path.join(output_path, item.split("/")[-1])

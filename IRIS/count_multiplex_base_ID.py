@@ -3,6 +3,7 @@ import cv2
 import os
 import csv
 
+
 def draw_point(multiplex_base_ID_point, rest_valid_point, save_path):
     img = cv2.imread(os.path.join(save_path, "background.tif"))
     for idx, item in multiplex_base_ID_point.iterrows():
@@ -13,7 +14,6 @@ def draw_point(multiplex_base_ID_point, rest_valid_point, save_path):
                    thickness=-1)
 
     cv2.imwrite(os.path.join(save_path, "multiplex_base_ID.PNG"), img)
-
 
 
 def count_multiplex_base_id(save_path):
@@ -42,7 +42,7 @@ def count_multiplex_point(path):
     data = pd.read_csv(os.path.join(path, "valid_rna_coordinate.csv"), sep=",", header=0)
 
     mul_id = data[data["mul_flag"] == 1]
-    mul_id.to_csv(os.path.join(path, "multiplex_point.csv"), sep=",", header=True,index=False)
+    mul_id.to_csv(os.path.join(path, "multiplex_point.csv"), sep=",", header=True, index=False)
     print("the total number of valid multiplex_base_id:", mul_id.shape[0])
 
     rest_point = data.drop(mul_id.index, axis=0)
@@ -51,5 +51,4 @@ def count_multiplex_point(path):
 
 
 if __name__ == "__main__":
-    data_path = "D:/topic/topic_5_ISS_analysis/0106/SIFT_1.5_output_result"
-    count_multiplex_point(data_path)
+    pass

@@ -102,10 +102,10 @@ def detect_blobs_Ke(f_cycle, cycle_path, temp_flag, blob_params_detect):
 
     ###############################################################################
     if temp_flag == 1:
-        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_Cy5.PNG"), channel_A)
-        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_Y7.PNG"), channel_T)
-        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_TXR.PNG"), channel_C)
-        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_Cy3.PNG"), channel_G)
+        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_A.PNG"), channel_A)
+        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_T.PNG"), channel_T)
+        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_C.PNG"), channel_C)
+        cv2.imwrite(os.path.join(cycle_path, "TOPHAT_G.PNG"), channel_G)
 
     channel_list = (channel_A, channel_T, channel_C, channel_G)
 
@@ -306,10 +306,10 @@ def detect_blobs_Ke(f_cycle, cycle_path, temp_flag, blob_params_detect):
     base_box_in_one_cycle, base_point = pool2base(image_model_pool)
 
     # drawing point in each channel
-    channel_point(base_point["A"], greyscale_model_A, os.path.join(cycle_path, "Cy5.PNG"))
-    channel_point(base_point["T"], greyscale_model_T, os.path.join(cycle_path, "Y7.PNG"))
-    channel_point(base_point["C"], greyscale_model_C, os.path.join(cycle_path, "TXR.PNG"))
-    channel_point(base_point["G"], greyscale_model_G, os.path.join(cycle_path, "Cy3.PNG"))
+    channel_point(base_point["A"], greyscale_model_A, os.path.join(cycle_path, "A.PNG"))
+    channel_point(base_point["T"], greyscale_model_T, os.path.join(cycle_path, "T.PNG"))
+    channel_point(base_point["C"], greyscale_model_C, os.path.join(cycle_path, "C.PNG"))
+    channel_point(base_point["G"], greyscale_model_G, os.path.join(cycle_path, "G.PNG"))
 
     return base_box_in_one_cycle
 

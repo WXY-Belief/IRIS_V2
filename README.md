@@ -105,7 +105,6 @@ The Configuration.yaml include all parameter in runing.
 ```
 python main.py --c <<absolute path of Configuration.yaml>>
 ```
-	barcode	quanlity	row	col	1	2	3	4	mul_flag
 ### Output result
 - `valid_basecalling_data.csv` :
   - `ID` : RNA ID is unique.

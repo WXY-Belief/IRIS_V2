@@ -93,7 +93,7 @@ The Configuration.yaml include all parameter in runing.
 | gene 2 | AATG |
 | gene 1 | GCAG |
 
-</div>
+</div>  
 ### Running
 ```
 python main.py --c <<absolute path of Configuration.yaml>>

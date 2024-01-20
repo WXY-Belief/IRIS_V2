@@ -46,9 +46,9 @@ The Configuration.yaml include all parameter in runing.
   
 - `iris_path`: absolute path of IRIS path.
 
-- `register_mode`: register mode. # Option: "ORB", "BRISK".
+- `register_mode`: register mode. ## Option: "ORB", "BRISK".
 
-- `mode`: whether to cut images when images is too large. # Option: com:NO large:YES.
+- `mode`: whether to cut images when images is too large. ## Option: com:NO large:YES.
 
 - `large_img_para`: First cutting
   - `cut_size` ": the size of cut img

@@ -46,9 +46,9 @@ The Configuration.yaml include all parameter in runing.
   
 - `iris_path`: absolute path of IRIS path.
 
-- `register_mode`: register mode. **## Option: "ORB", "BRISK"**.
+- `register_mode`: register mode. **# Option: "ORB", "BRISK"**.
 
-- `mode`: whether to cut images when images is too large. ## Option: com:NO large:YES.
+- `mode`: whether to cut images when images is too large. **# Option: com:NO large:YES**.
 
 - `large_img_para`: First cutting
   - `cut_size` ": the size of cut img
@@ -75,7 +75,7 @@ The Configuration.yaml include all parameter in runing.
   
 - `barcode_path`: gene-barcode file, txt file.
 
-- `search_region`: the size of search region  in connect base on different cycle. # Option: 1, 2, 3, 4, ... .
+- `search_region`: the size of search region  in connect base on different cycle. **# Option: 1, 2, 3, 4, ... **.
 
 - `temp_flag`: whether to generate debug file. # Option: 0:NO 1:YES.
 
@@ -99,7 +99,25 @@ The Configuration.yaml include all parameter in runing.
 ```
 python main.py --c <<absolute path of Configuration.yaml>>
 ```
-
+	barcode	quanlity	row	col	1	2	3	4	mul_flag
 ### Output result
-- `valid_basecalling_data.csv` : 
+- `valid_basecalling_data.csv` :
+  - `ID` : RNA ID is unique.
+  - `barcode` : barcodes corresponding to genes.
+  - `quanlity,  1, 2, 3, 4 ` : This used to be debug.
+  - `row` : The row coordinates of RNA.
+  - `col` : The col coordinates of RNA.
+  - `mul_flag` : Whether it is a multiplexed RNA, meaning a point in one cycle and one channel is used by multiple RNAs.
+  - `gene` : gene name.
+<div align="center">
+  
+| ID | barcode | quanlity | row | col | 1 | 2 | 3 | 4 | mul_flag | gene |
+| ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- |
+| r00014c00015 | ATCG | !I!! | 2214.0 | 865.0 | N | r00014c00015 | N | N | 0 | Cdhr1 |
+| r00074c00380 | ATTG | !D!! | 2387.0 | 1234.0 | N | r00351c00384 | N | N | 1 | Cdhr1 |
+| r00247c00031 | TTCG | I'!! | 2210.0 | 868.0 | N | n | N | N | 0 | Cdhr2 |
+
+</div>  
+
+
 

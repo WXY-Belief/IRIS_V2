@@ -81,7 +81,7 @@ The Configuration.yaml include all parameter in runing.
 
 - `blob_params`: Second cutting
   - `minThreshold` ": The threshold of pixel filtered. # Option: "AUTO", 0, 1, ..., 10.
-  - `maxArea` ": The maximum area of point. # Option 65, 121, 145
+  - `maxArea` ": The maximum area of point. # Option: 65, 121, 145
 
 ### Format of input data(barcode)
 (1) barcode_path: gene-barcode infomation. 

@@ -46,9 +46,9 @@ The Configuration.yaml include all parameter in runing.
   
 - `iris_path`: absolute path of IRIS path.
 
-- `register_mode`: register mode. # Alternative option: "ORB", "BRISK".
+- `register_mode`: register mode. # Option: "ORB", "BRISK".
 
-- `mode`: whether to cut images when images is too large. com:NO large:YES.
+- `mode`: whether to cut images when images is too large. # Option: com:NO large:YES.
 
 - `large_img_para`: First cutting
   - `cut_size` ": the size of cut img
@@ -75,13 +75,13 @@ The Configuration.yaml include all parameter in runing.
   
 - `barcode_path`: gene-barcode file, txt file.
 
-- `search_region`: the size of search region  in connect base on different cycle. # Alternative option: 2, 3, 4.
+- `search_region`: the size of search region  in connect base on different cycle. # Option: 1, 2, 3, 4, ... .
 
-- `temp_flag`: whether to generate debug file. 0:NO 1:YES
+- `temp_flag`: whether to generate debug file. # Option: 0:NO 1:YES.
 
 - `blob_params`: Second cutting
-  - `minThreshold` ": The threshold of pixel filtered. Alternative option: "AUTO", 0, 1, ..., 10.
-  - `maxArea` ": The maximum area of point. Alternative option 65, 121, 145
+  - `minThreshold` ": The threshold of pixel filtered. # Option: "AUTO", 0, 1, ..., 10.
+  - `maxArea` ": The maximum area of point. # Option 65, 121, 145
 
 ### Format of input data(barcode)
 (1) barcode_path: gene-barcode infomation. 

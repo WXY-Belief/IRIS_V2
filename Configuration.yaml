@@ -9,7 +9,7 @@ large_img_para:     # First cutting
   cut_size: 10000   # the size of cut img
   overlap: 100      # the overlap size of cut img
 
-small_img_para:     # second
+small_img_para:     # Second cutting
   cut_size: 2048    # the size of cut img
   overlap: 100    # the overlap size of cut img
 

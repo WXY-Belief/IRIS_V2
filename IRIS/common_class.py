@@ -179,6 +179,6 @@ class TransformCoordinate(object):
         valid_rna.to_csv(os.path.join(self.save_path, "valid_rna_coordinate.csv"), sep=",", header=True, index=False)
         print("The number of valid RNA is", valid_rna.shape[0])
 
-        v_point = DrawPoint(valid_rna, os.path.join(self.save_path, "background.tif"), True,
+        v_point = DrawPoint(valid_rna, os.path.join(self.save_path, "background.tif"), False,
                             os.path.join(self.save_path, "valid_rna_coordinate.PNG"))
         v_point.draw()

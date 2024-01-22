@@ -127,9 +127,9 @@ python main.py --c <<absolute path of Configuration.yaml>>
 
 ## 4.A solution for a specific BUG.
 **(1)pyvips**  
-  **For Windows**  
+- **For Windows**  
     if you encounter an issue with "pyvips" not importing.Please download the "vips"  package from https://github.com/libvips/libvips/releases and add the installation path into **environment variables**.  
-  **For Linux**  
+- **For Linux**  
     To install "pyvips" using conda and then adding the installation path into **environment variables**.You can find detailed installation instructions at https://anaconda.org/conda-forge/pyvips.  
 
 

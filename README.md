@@ -90,7 +90,7 @@ The Configuration.yaml include all parameter in runing.
   - `maxArea` ": The maximum area of point. # Option: 65, 121, 145
 
 ### Format of input data(barcode)
-(1) barcode_path: gene-barcode infomation. 
+1) barcode_path: gene-barcode infomation. 
 <div align="center">
   
 | gene | barcode |

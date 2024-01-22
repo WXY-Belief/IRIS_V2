@@ -1,12 +1,23 @@
-import numpy as np
-from PIL import Image
 import os
+import csv
 import cv2
 import math
 import shutil
-import csv
+import pyvips
+import numpy as np
 import pandas as pd
+from PIL import Image
 from cv2 import add, addWeighted
+
+
+# Reading image
+def read_image(image_path):
+    image = pyvips.Image.new_from_file(image_path).colourspace('b-w')
+    array = np.ndarray(buffer=image.write_to_memory(),
+                       dtype=np.uint8,
+                       shape=[image.height, image.width])
+
+    return array
 
 
 # cut images
@@ -24,9 +35,9 @@ class CutImages(object):
         self.infos = []
 
     def calculate_row_num_and_col_num(self, channels):
-        images = Image.open(os.path.join(self.images_path, str(self.cycle_names[0]), channels["0"]))
-        self.row_num = math.ceil(images.height / (self.cut_size - self.overlap))
-        self.col_num = math.ceil(images.width / (self.cut_size - self.overlap))
+        images = read_image(os.path.join(self.images_path, str(self.cycle_names[0]), channels["0"]))
+        self.row_num = math.ceil(images.shape[0] / (self.cut_size - self.overlap))
+        self.col_num = math.ceil(images.shape[1] / (self.cut_size - self.overlap))
 
     def mkdir_dir(self):
         if self.mode == "com":
@@ -86,11 +97,11 @@ class CutImages(object):
 
         if self.mode == "large":
             for i in range(0, len(self.cycle_names)):
-                channel_A = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["A"])))
-                channel_T = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["T"])))
-                channel_C = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["C"])))
-                channel_G = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["G"])))
-                channel_0 = np.array(Image.open(os.path.join(self.images_path, str(self.cycle_names[i]), channels["0"])))
+                channel_A = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["A"]))
+                channel_T = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["T"]))
+                channel_C = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["C"]))
+                channel_G = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["G"]))
+                channel_0 = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["O"]))
 
                 self.cut_image(channel_A, channels["A"], self.cycle_names[i])
                 self.cut_image(channel_T, channels["T"], self.cycle_names[i])
@@ -129,10 +140,9 @@ class DrawPoint(object):
         self.point_color = point_color
 
     def draw(self):
-        if self.is_no_bg:
-            img = cv2.imread(self.bg_img_path)
-        else:
-            img = np.zeros(cv2.imread(self.bg_img_path).shape)
+        img = read_image(self.bg_img_path)
+        if not self.is_no_bg:
+            img = np.zeros(img.shape)
         for idx, item in self.points.iterrows():
             cv2.circle(img, (int(item["col"]), int(item["row"])), radius=self.point_size, color=self.point_color,
                        thickness=-1)

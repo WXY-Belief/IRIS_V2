@@ -5,14 +5,15 @@ Our software generate a 3D matrix to store all the images. Each channel is made 
 tensor in the order of cycle
 """
 import os.path
+import numpy as np
+from IRIS.common_class import read_image
 from sys import stderr
-from cv2 import (imread, imwrite, add, addWeighted, warpAffine, IMREAD_GRAYSCALE)
+from cv2 import (imwrite, add, addWeighted, warpAffine)
 from numpy import (array, uint8)
 from .register_images import register_cycles
-import numpy as np
 
 
-def decode_data_Ke(config, data_path, output_path):
+def decode_data_Ke(config, data_path, output_path, channel):
     """
     :param f_cycles: The image directories in sequence of cycles, of which the different channels are stored.
     :return: A tuple including a 3D matrix and a background image matrix.
@@ -37,11 +38,11 @@ def decode_data_Ke(config, data_path, output_path):
         ####################################
         # Read five channels into a matrix #
         ####################################
-        channel_A = imread(os.path.join(data_path, str(f_cycles[cycle_id]), 'Cy5.tif'), IMREAD_GRAYSCALE)
-        channel_T = imread(os.path.join(data_path, str(f_cycles[cycle_id]), 'Y7.tif'), IMREAD_GRAYSCALE)
-        channel_C = imread(os.path.join(data_path, str(f_cycles[cycle_id]), 'TXR.tif'), IMREAD_GRAYSCALE)
-        channel_G = imread(os.path.join(data_path, str(f_cycles[cycle_id]), 'Cy3.tif'), IMREAD_GRAYSCALE)
-        channel_0 = imread(os.path.join(data_path, str(f_cycles[cycle_id]), 'DAPI.tif'), IMREAD_GRAYSCALE)
+        channel_A = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["A"]))
+        channel_T = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["T"]))
+        channel_C = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["C"]))
+        channel_G = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["G"]))
+        channel_0 = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["0"]))
         ####################################
 
         #########################################################################################

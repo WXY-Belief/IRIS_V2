@@ -5,11 +5,12 @@ import shutil
 import argparse
 import numpy as np
 from sys import stderr
-from numpy import (array, uint8)
-from cv2 import (imread, add, addWeighted, IMREAD_GRAYSCALE)
 from multiprocessing import Pool
-from IRIS import (import_images, detect_signals, connect_barcodes, deal_with_result)
+from numpy import (array, uint8)
+from IRIS.common_class import read_image
+from cv2 import (imread, add, addWeighted, IMREAD_GRAYSCALE)
 from IRIS.common_class import CutImages, TransformCoordinate
+from IRIS import (import_images, detect_signals, connect_barcodes, deal_with_result)
 from IRIS.count_multiplex_base_ID import count_multiplex_base_id, count_multiplex_point
 
 
@@ -31,11 +32,11 @@ def import_img(f_cycles, channels):
 
     for cycle_id in range(0, len(f_cycles)):
         adj_img_mats = []
-        channel_A = imread('/'.join((str(f_cycles[cycle_id]), channels["A"])), IMREAD_GRAYSCALE)
-        channel_T = imread('/'.join((str(f_cycles[cycle_id]), channels["T"])), IMREAD_GRAYSCALE)
-        channel_C = imread('/'.join((str(f_cycles[cycle_id]), channels["C"])), IMREAD_GRAYSCALE)
-        channel_G = imread('/'.join((str(f_cycles[cycle_id]), channels["G"])), IMREAD_GRAYSCALE)
-        channel_0 = imread('/'.join((str(f_cycles[cycle_id]), channels["0"])), IMREAD_GRAYSCALE)
+        channel_A = read_image('/'.join((str(f_cycles[cycle_id]), channels["A"])))
+        channel_T = read_image('/'.join((str(f_cycles[cycle_id]), channels["T"])))
+        channel_C = read_image('/'.join((str(f_cycles[cycle_id]), channels["C"])))
+        channel_G = read_image('/'.join((str(f_cycles[cycle_id]), channels["G"])))
+        channel_0 = read_image('/'.join((str(f_cycles[cycle_id]), channels["0"])))
 
         if cycle_id == 0:
             foreground = add(add(add(channel_A, channel_T), channel_C), channel_G)
@@ -83,7 +84,7 @@ def main_call(config, data_path, output_path, config_path):
     # aligning tissue slice in all cycle by reference
     time_1 = time.time()
 
-    cycle_stack, std_img = import_images.decode_data_Ke(config, data_path, output_path)
+    cycle_stack, std_img = import_images.decode_data_Ke(config, data_path, output_path, config["channel"])
     print("The time aligned images is", int(time.time() - time_1))
 
     # cuting img

@@ -54,7 +54,7 @@ The Configuration.yaml include all parameter in runing.
 
 - `register_mode`: register mode. **# Option: "ORB", "BRISK"**.
 
-- `mode`: whether to cut images when images is too large. **# Option: com:NO large:YES**.
+- `mode`:# whether to cut images when images is too large. **# Option: all:large cuting and small cuting small:YES small cuting, No: No cuting**.
 
 - `large_img_para`: First cutting
   - `cut_size` ": the size of cut img
@@ -78,12 +78,14 @@ The Configuration.yaml include all parameter in runing.
   - T : the name of channel T
   - C : the name of channel C
   - G : the name of channel G
-  
+
+- `RNA_filter_flag`: # whether filtering the RNA.**# Option: No, Yes**.
+
 - `barcode_path`: gene-barcode file, txt file.
 
 - `search_region`: the size of search region  in connect base on different cycle. **# Option: 1, 2, 3, 4, ... **.
 
-- `temp_flag`: whether to generate debug file. # Option: 0:NO 1:YES.
+- `temp_flag`: whether to generate debug file. **# Option: No, Yes**.
 
 - `blob_params`: Second cutting
   - `minThreshold` ": The threshold of pixel filtered. # Option: "AUTO", 0, 1, ..., 10.

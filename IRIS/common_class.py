@@ -88,7 +88,7 @@ class CutImages(object):
                     return
 
     def main_cut(self, cycle_stack=None,
-                 channels={"A": "Cy5.tif", "T": "Y7.tif", "C": "TXR.tif", "G": "Cy3.tif", "0": "DAPI.tif"}):
+                 channels={"A": "Cy5.tif", "T": "Y7.tif", "C": "TXR.tif", "0": "DAPI.tif"}):
         # calculating the number of row and col
         self.calculate_row_num_and_col_num(channels)
 
@@ -100,17 +100,15 @@ class CutImages(object):
                 channel_A = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["A"]))
                 channel_T = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["T"]))
                 channel_C = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["C"]))
-                channel_G = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["G"]))
                 channel_0 = read_image(os.path.join(self.images_path, str(self.cycle_names[i]), channels["O"]))
 
                 self.cut_image(channel_A, channels["A"], self.cycle_names[i])
                 self.cut_image(channel_T, channels["T"], self.cycle_names[i])
                 self.cut_image(channel_C, channels["C"], self.cycle_names[i])
-                self.cut_image(channel_G, channels["G"], self.cycle_names[i])
                 self.cut_image(channel_0, channels["0"], self.cycle_names[i])
 
                 if self.cycle_names[i] == 1:
-                    background_img = add(add(add(channel_A, channel_T), channel_C), channel_G)
+                    background_img = add(add(channel_A, channel_T), channel_C)
                     f_std_img = addWeighted(background_img, 0.5, channel_0, 0.6, 0)
 
                     cv2.imwrite(os.path.join(self.save_path, "background.tif"), f_std_img)
@@ -119,13 +117,11 @@ class CutImages(object):
                 channel_A = cycle_stack[i][0]
                 channel_T = cycle_stack[i][1]
                 channel_C = cycle_stack[i][2]
-                channel_G = cycle_stack[i][3]
-                channel_0 = cycle_stack[i][4]
+                channel_0 = cycle_stack[i][3]
 
                 self.cut_image(channel_A, channels["A"], self.cycle_names[i])
                 self.cut_image(channel_T, channels["T"], self.cycle_names[i])
                 self.cut_image(channel_C, channels["C"], self.cycle_names[i])
-                self.cut_image(channel_G, channels["G"], self.cycle_names[i])
                 self.cut_image(channel_0, channels["0"], self.cycle_names[i])
 
 
@@ -151,19 +147,19 @@ class DrawPoint(object):
 
 # transform coordinate
 class TransformCoordinate(object):
-    def __init__(self, data_path, barcode_path, save_path, cut_size, overlap):
+    def __init__(self, data_path, barcode_path, save_path, cut_size, overlap, RNA_filter_flag):
         self.data_path = data_path
         self.barcode_path = barcode_path
         self.save_path = save_path
         self.cut_size = cut_size
         self.overlap = overlap
+        self.RNA_filter_flag = RNA_filter_flag
 
     def transform_coordinate(self):
         img_path_and_cycle_name = os.listdir(self.data_path)
         barcode = pd.read_csv(self.barcode_path, sep="\t", header=0, quoting=csv.QUOTE_NONE)
 
         ori_rna = pd.DataFrame()
-        valid_rna = pd.DataFrame()
         for item in img_path_and_cycle_name:
             rna_path = os.path.join(self.data_path, item, "mul_basecalling_data.txt")
             if not os.path.exists(rna_path):
@@ -181,14 +177,16 @@ class TransformCoordinate(object):
             rna_coor["col"] = rna_coor["col"] + col_start
 
             ori_rna = pd.concat([ori_rna, rna_coor])  # all rna
-            rna_coor = pd.merge(rna_coor, barcode, on="barcode")
-            valid_rna = pd.concat([valid_rna, rna_coor])  # valid rna
 
         ori_rna.to_csv(os.path.join(self.save_path, "mul_basecalling_data.txt"), sep="\t", header=True, index=False)
         print("The number of all RNA detectedis", ori_rna.shape[0])
-        valid_rna.to_csv(os.path.join(self.save_path, "valid_rna_coordinate.csv"), sep=",", header=True, index=False)
-        print("The number of valid RNA is", valid_rna.shape[0])
 
-        v_point = DrawPoint(valid_rna, os.path.join(self.save_path, "background.tif"), False,
-                            os.path.join(self.save_path, "valid_rna_coordinate.PNG"))
-        v_point.draw()
+        if self.RNA_filter_flag == "Yes":
+            valid_rna = pd.DataFrame()
+            rna_coor = pd.merge(ori_rna, barcode, on="barcode")
+            valid_rna = pd.concat([valid_rna, rna_coor])  # valid rna
+            valid_rna.to_csv(os.path.join(self.save_path, "valid_rna_coordinate.csv"), sep=",", header=True, index=False)
+            print("The number of valid RNA is", valid_rna.shape[0])
+            v_point = DrawPoint(valid_rna, os.path.join(self.save_path, "background.tif"), False,
+                                os.path.join(self.save_path, "valid_rna_coordinate.PNG"))
+            v_point.draw()

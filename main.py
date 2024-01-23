@@ -8,7 +8,7 @@ from sys import stderr
 from multiprocessing import Pool
 from numpy import (array, uint8)
 from IRIS.common_class import read_image
-from cv2 import (imread, add, addWeighted, IMREAD_GRAYSCALE)
+from cv2 import (add, addWeighted)
 from IRIS.common_class import CutImages, TransformCoordinate
 from IRIS import (import_images, detect_signals, connect_barcodes, deal_with_result)
 from IRIS.count_multiplex_base_ID import count_multiplex_base_id, count_multiplex_point
@@ -35,18 +35,16 @@ def import_img(f_cycles, channels):
         channel_A = read_image('/'.join((str(f_cycles[cycle_id]), channels["A"])))
         channel_T = read_image('/'.join((str(f_cycles[cycle_id]), channels["T"])))
         channel_C = read_image('/'.join((str(f_cycles[cycle_id]), channels["C"])))
-        channel_G = read_image('/'.join((str(f_cycles[cycle_id]), channels["G"])))
-        channel_0 = read_image('/'.join((str(f_cycles[cycle_id]), channels["0"])))
+        channel_0 = read_image('/'.join((str(f_cycles[cycle_id]), channels[0])))
 
         if cycle_id == 0:
-            foreground = add(add(add(channel_A, channel_T), channel_C), channel_G)
+            foreground = add(add(channel_A, channel_T), channel_C)
             background = channel_0
             f_std_img = addWeighted(foreground, 0.5, background, 0.6, 0)
 
         adj_img_mats.append(channel_A)
         adj_img_mats.append(channel_T)
         adj_img_mats.append(channel_C)
-        adj_img_mats.append(channel_G)
         adj_img_mats.append(channel_0)
 
         f_cycle_stack.append(adj_img_mats)
@@ -81,32 +79,36 @@ def main_detect(info: list):
 
 def main_call(config, data_path, output_path, config_path):
     print(output_path)
+
     # aligning tissue slice in all cycle by reference
     time_1 = time.time()
-
     cycle_stack, std_img = import_images.decode_data_Ke(config, data_path, output_path, config["channel"])
     print("The time aligned images is", int(time.time() - time_1))
 
-    # cuting img
-    small_img_para = config["small_img_para"]
-    small_images = CutImages(data_path, small_img_para["cut_size"], output_path, small_img_para["overlap"],
-                             config["cycle"], config["iris_path"])
-    small_images.main_cut(cycle_stack=cycle_stack, channels=config["channel"])
-    print("the number of small img is", len(small_images.infos))
+    if config["mode"] == "small":
+        # cuting img
+        small_img_para = config["small_img_para"]
+        small_images = CutImages(data_path, small_img_para["cut_size"], output_path, small_img_para["overlap"],
+                                 config["cycle"], config["iris_path"])
+        small_images.main_cut(cycle_stack=cycle_stack, channels=config["channel"])
+        print("the number of small img is", len(small_images.infos))
 
-    # detected RNA
-    time_2 = time.time()
-    pool = Pool(processes=core_num)
-    pool.map(main_detect, [[_, config_path] for _ in small_images.infos])
-    pool.close()
-    pool.join()
-    print("The time detected RNA is", int(time.time() - time_2))
+        # detected RNA
+        time_2 = time.time()
+        pool = Pool(processes=core_num)
+        pool.map(main_detect, [[_, config_path] for _ in small_images.infos])
+        pool.close()
+        pool.join()
+        print("The time detected RNA is", int(time.time() - time_2))
 
-    # stitching img and transforming coordinate
-    barcode_path = config["barcode_path"]
-    small_stitch = TransformCoordinate(os.path.join(output_path, "small_vision"), barcode_path, output_path,
-                                       small_img_para["cut_size"], small_img_para["overlap"])
-    small_stitch.transform_coordinate()
+        # stitching img and transforming coordinate
+        barcode_path = config["barcode_path"]
+        small_stitch = TransformCoordinate(os.path.join(output_path, "small_vision"), barcode_path, output_path,
+                                           small_img_para["cut_size"], small_img_para["overlap"], config["RNA_filter_flag"])
+        small_stitch.transform_coordinate()
+    else:
+        info = [config["data_path"], config_path]
+        main_detect(info)
 
     # copy configuration into putput dir
     shutil.copyfile(config_path, os.path.join(output_path, "Configuration.yaml"))
@@ -141,12 +143,12 @@ if __name__ == '__main__':
             os.makedirs(single_output_path, exist_ok=True)
             main_call(config, item, single_output_path, args.c)
         Big_stitch = TransformCoordinate(output_path, config["barcode_path"], output_path, large_img_para["cut_size"],
-                                         large_img_para["overlap"])
+                                         large_img_para["overlap"], config["RNA_filter_flag"])
         Big_stitch.transform_coordinate()
 
     else:
         main_call(config, config["data_path"], output_path, args.c)
 
     # counting the number of multiplex
-    count_multiplex_point(output_path)
+    count_multiplex_point(output_path, config["RNA_filter_flag"])
     print("The total time is", int(time.time() - total_start_time))

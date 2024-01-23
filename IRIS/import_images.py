@@ -42,7 +42,7 @@ def decode_data_Ke(config, data_path, output_path, channel):
         channel_T = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["T"]))
         channel_C = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["C"]))
         channel_G = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["G"]))
-        channel_0 = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel["0"]))
+        channel_0 = read_image(os.path.join(data_path, str(f_cycles[cycle_id]), channel[0]))
         ####################################
 
         #########################################################################################

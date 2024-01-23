@@ -105,7 +105,7 @@ def decode_data_Ke(config, data_path, output_path, channel):
         #############################
         # For registration checking #
         #############################
-        if temp_flag:
+        if temp_flag == "Yes":
             debug_img = np.zeros((channel_0.shape[0], channel_0.shape[1], 3))
             debug_img[:, :, 0] = f_cycle_stack[0][-1]
             debug_img[:, :, 1] = channel_0

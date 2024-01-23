@@ -101,7 +101,7 @@ def detect_blobs_Ke(f_cycle, cycle_path, temp_flag, blob_params_detect):
     ###############################
 
     ###############################################################################
-    if temp_flag == 1:
+    if temp_flag == "Yes":
         cv2.imwrite(os.path.join(cycle_path, "TOPHAT_A.PNG"), channel_A)
         cv2.imwrite(os.path.join(cycle_path, "TOPHAT_T.PNG"), channel_T)
         cv2.imwrite(os.path.join(cycle_path, "TOPHAT_C.PNG"), channel_C)

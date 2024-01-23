@@ -90,7 +90,7 @@ The Configuration.yaml include all parameter in runing.
   - `maxArea` ": The maximum area of point. # Option: 65, 121, 145
 
 ### Format of input data(barcode)
-(1) barcode_path: gene-barcode infomation. 
+1) barcode_path: gene-barcode infomation. 
 <div align="center">
   
 | gene | barcode |
@@ -124,5 +124,12 @@ python main.py --c <<absolute path of Configuration.yaml>>
 
 </div>  
 
+
+## 4.A solution for a specific BUG.
+**1) pyvips**  
+- **For Windows**  
+    if you encounter an issue with "pyvips" not importing.Please download the "vips"  package from https://github.com/libvips/libvips/releases and add the installation path into **environment variables**.  
+- **For Linux**  
+    To install "pyvips" using conda.You can find detailed installation instructions at https://anaconda.org/conda-forge/pyvips.  
 
 

@@ -107,7 +107,7 @@ def detect_blobs_Ke(f_cycle, cycle_path, temp_flag, blob_params_detect):
         cv2.imwrite(os.path.join(cycle_path, "TOPHAT_C.PNG"), channel_C)
         cv2.imwrite(os.path.join(cycle_path, "TOPHAT_G.PNG"), channel_G)
 
-    channel_list = (channel_A, channel_T, channel_C, channel_G)
+    channel_list = [channel_A, channel_T, channel_C, channel_G]
 
     mor_kps1 = []
     mor_kps2 = []
